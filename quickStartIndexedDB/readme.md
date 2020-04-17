@@ -15,3 +15,7 @@ Now let's get into the more complex stuff, starting with making a connection to 
 const request = window.indexedDB.open("toDoList", 1);
 var db; //this is a variable we will use throughout the file so I've decalred this globally
 ```
+
+
+Here is what the app looks like!
+![Nice Photo](./assets/myCoolWebsite.png) 
