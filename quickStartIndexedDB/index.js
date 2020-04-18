@@ -8,13 +8,13 @@ const request = window.indexedDB.open("toDoList", 2);
 var db;
 
 request.onsuccess = function (event) {
-  console.log("[onsuccess]", request.result);
+  console.log("check out some data about our opened db: ", request.result);
   db = event.target.result; // === request.result
   getTasks()
 };
 
 request.onerror = function (event) {
-  console.log("[onerror]", request.error);
+  console.log("Uh oh something went wrong :( ", request.error);
 };
 
 // onupgradeneeded event is triggered when we are trying to create a new database or trying to upgrade the database with a new version.
@@ -23,8 +23,8 @@ request.onerror = function (event) {
 //  This is a great place to create the object store.
 
 request.onupgradeneeded = function (event) {
-    db = event.target.result;
   // create object store from db or event.target.result
+  db = event.target.result;
   let store = db.createObjectStore("tasks", { keyPath: "id", autoIncrement: true });
   store.createIndex("name", "name", {unique: false});
 
@@ -51,7 +51,7 @@ function getTasks(){
 
     retrievedb.result.map(function(item){
       console.log(item)
-      $(".list-group").append("<li class='list-group-item'>" + item.id + ": " + item.value + "<button style='float: right' type='button' idNo="+ item.id + " class='btn btn-danger deleteBtn'>Delete Task</button>")
+      $(".list-group").append("<li class='list-group-item'>" + item.id + ": " + item.value + "<button style='float: right' type='button' idNo="+ item.id + " class='btn btn-danger deleteBtn'>Delete Task</button>" +"<button style='float: right; margin-right:5px;' type='button' idNo="+ item.id + " class='btn btn-info editBtn' data-toggle='modal' data-target='#exampleModalCenter'>Edit Task</button>")
     })
     
 
@@ -64,7 +64,6 @@ $("#newTask").click(function(){
   var transaction = db.transaction("tasks", "readwrite");
   var tasksStore = transaction.objectStore("tasks");
   let addReq =tasksStore.add({value: task});
-  //when the task is added clear the form and retrieve from db
   addReq.onsuccess = function (e){
     $("#taskName").val("")
     getTasks()
@@ -81,7 +80,49 @@ $(document).on("click",".deleteBtn",function(){
   deleteReq.onsuccess = function(){
     getTasks()
   }
-  console.log("delete button")
+})
+$(document).on("click",".editBtn",function(){
+  var transaction = db.transaction("tasks", "readwrite");
+  const store = transaction.objectStore('tasks')
+  let taskId = $(this).attr("idNo")
+
+  var requestForItem = store.get(Number(taskId));
+  requestForItem.onsuccess = function() {
+    console.log(requestForItem.result)
+    //give modal the old data and the store so that it can prepolulate the input and complete the transaction
+    editModal(requestForItem.result, store)
+    // var data = requestForItem.result
+    // data.name = $(".editInput").val().trim()
+
+  }
+
+  function editModal(oldData, store){
+    console.log(oldData.id)
+    $(".editInput").val(oldData.value)
+    
+    $(".saveBtn").click(function(){
+      // var newData =$(".editInput").val().trim()
+      oldData.value = $(".editInput").val().trim()
+      console.log(oldData)
+      var updateNameRequest = store.put(oldData, Number(oldData.id))
+      updateNameRequest.onerror = function() {
+        console.log("something went wrong")
+        console.log(updateNameRequest.error)
+      };
+      updateNameRequest.onsuccess = function() {
+        $(".editInput").val("")
+        getTasks();
+      };
+
+    })
+  }
+
+  // console.log(taskId)
+  // var deleteReq = store.put(Number(taskId))
+  // deleteReq.onsuccess = function(){
+  //   getTasks()
+  // }
+  console.log("edit button")
 })
 
 // used to be in request.onsuccess
