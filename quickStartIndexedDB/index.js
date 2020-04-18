@@ -1,5 +1,7 @@
 if (!window.indexedDB) {
-  console.log("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
+  console.log(
+    "Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available."
+  );
 }
 
 //TODO: implement a todo list which works offline
@@ -9,12 +11,12 @@ var db;
 
 request.onsuccess = function (event) {
   console.log("check out some data about our opened db: ", request.result);
-  db = event.target.result; // === request.result
-  getTasks()
+  db = event.target.result; // result of opening the indexedDB instance "toDoList"
+  getTasks();
 };
 
 request.onerror = function (event) {
-  console.log("Uh oh something went wrong :( ", request.error);
+  alert("Uh oh something went wrong :( ", request.error);
 };
 
 // onupgradeneeded event is triggered when we are trying to create a new database or trying to upgrade the database with a new version.
@@ -25,8 +27,11 @@ request.onerror = function (event) {
 request.onupgradeneeded = function (event) {
   // create object store from db or event.target.result
   db = event.target.result;
-  let store = db.createObjectStore("tasks", { keyPath: "id", autoIncrement: true });
-  store.createIndex("name", "name", {unique: false});
+  let store = db.createObjectStore("tasks", {
+    keyPath: "id",
+    autoIncrement: true,
+  });
+  store.createIndex("name", "name", { unique: false });
 
   // To insert or do any operations on database, we need to get the transaction object from the database.
   // That can be done by using the transaction method in the database with one of the following signatures.
@@ -41,110 +46,156 @@ request.onupgradeneeded = function (event) {
   //   var objectStore = transaction.objectStore(storeName);
 };
 
-function getTasks(){
+function getTasks() {
   var transaction = db.transaction("tasks", "readwrite");
   var tasksStore = transaction.objectStore("tasks");
-  var retrievedb = tasksStore.getAll()
-  retrievedb.onsuccess = function(){
-    console.log(retrievedb.result)
-    $(".list-group").empty()
+  var retrievedb = tasksStore.getAll();
+  retrievedb.onsuccess = function () {
+    console.log(retrievedb.result);
+    $(".list-group").empty();
 
-    retrievedb.result.map(function(item){
-      console.log(item)
-      $(".list-group").append("<li class='list-group-item'>" + item.id + ": " + item.value + "<button style='float: right' type='button' idNo="+ item.id + " class='btn btn-danger deleteBtn'>Delete Task</button>" +"<button style='float: right; margin-right:5px;' type='button' idNo="+ item.id + " class='btn btn-info editBtn' data-toggle='modal' data-target='#exampleModalCenter'>Edit Task</button>")
-    })
-    
-
-  }
+    retrievedb.result.map(function (item) {
+      console.log(item);
+      $(".list-group").append(
+        "<li class='list-group-item'>" +
+          item.id +
+          ": " +
+          item.name +
+          "<button style='float: right' type='button' idNo=" +
+          item.id +
+          " class='btn btn-danger deleteBtn'>Delete Task</button>" +
+          "<button style='float: right; margin-right:5px;' type='button' idNo=" +
+          item.id +
+          " class='btn btn-info editBtn' data-toggle='modal' data-target='#exampleModalCenter'>Edit Task</button>"
+      );
+    });
+  };
 }
 
-$("#newTask").click(function(){
+$("#newTask").click(function () {
   // console.log($("#taskName").val())
-  var task = $("#taskName").val().trim()
+  var task = $("#taskName").val().trim();
   var transaction = db.transaction("tasks", "readwrite");
   var tasksStore = transaction.objectStore("tasks");
-  let addReq =tasksStore.add({value: task});
-  addReq.onsuccess = function (e){
-    $("#taskName").val("")
-    getTasks()
-  }
-})
+  let addReq = tasksStore.add({ name: task });
+  addReq.onsuccess = function (e) {
+    $("#taskName").val("");
+    getTasks();
+  };
+});
 
-
-$(document).on("click",".deleteBtn",function(){
+$(document).on("click", ".deleteBtn", function () {
   var transaction = db.transaction("tasks", "readwrite");
-  const store = transaction.objectStore('tasks')
-  let taskId = $(this).attr("idNo")
-  console.log(taskId)
-  var deleteReq = store.delete(Number(taskId))
-  deleteReq.onsuccess = function(){
-    getTasks()
-  }
-})
-$(document).on("click",".editBtn",function(){
+  const store = transaction.objectStore("tasks");
+  let taskId = $(this).attr("idNo");
+  console.log(taskId);
+  var deleteReq = store.delete(Number(taskId));
+  deleteReq.onsuccess = function () {
+    getTasks();
+  };
+});
+$(document).on("click", ".editBtn", function () {
   var transaction = db.transaction("tasks", "readwrite");
-  const store = transaction.objectStore('tasks')
-  let taskId = $(this).attr("idNo")
+  var tasksStore = transaction.objectStore("tasks");
+  console.log(tasksStore);
+  let taskId = $(this).attr("idNo");
 
-  var requestForItem = store.get(Number(taskId));
-  requestForItem.onsuccess = function() {
-    console.log(requestForItem.result)
+  var requestForItem = tasksStore.get(Number(taskId));
+  requestForItem.onsuccess = function () {
+    // console.log(requestForItem.result)
+    var oldData = requestForItem.result;
     //give modal the old data and the store so that it can prepolulate the input and complete the transaction
-    editModal(requestForItem.result, store)
+    // editModal(requestForItem.result, store)
     // var data = requestForItem.result
     // data.name = $(".editInput").val().trim()
+    $(".editInput").val(requestForItem.result.name);
 
-  }
-
-  function editModal(oldData, store){
-    console.log(oldData.id)
-    $(".editInput").val(oldData.value)
-    
-    $(".saveBtn").click(function(){
+    $(".saveBtn").click(function () {
       // var newData =$(".editInput").val().trim()
-      oldData.value = $(".editInput").val().trim()
-      console.log(oldData)
-      var updateNameRequest = store.put(oldData, Number(oldData.id))
+      requestForItem.result.name = $(".editInput").val().trim()
+      console.log( requestForItem.result)
+      var updateNameRequest = tasksStore.put( requestForItem.result.name, Number(requestForItem.result.id))
+      console.log("-------------", updateNameRequest.transaction)
       updateNameRequest.onerror = function() {
         console.log("something went wrong")
         console.log(updateNameRequest.error)
       };
       updateNameRequest.onsuccess = function() {
+        console.log("here")
         $(".editInput").val("")
         getTasks();
       };
+      //from mozilla with slight changes for my data
+      // tasksStore.openCursor().onsuccess = function (event) {
+      //   const cursor = event.target.result;
+      //   if (cursor) {
+      //     if (cursor.value.id === requestForItem.result.id) {
+      //       const updateData = cursor.value;
 
-    })
-  }
+      //       updateData.name = $(".editInput").val().trim();
+      //       const request = cursor.update(updateData);
+      //       request.onsuccess = function () {
+      //         console.log("nice");
+      //       };
+      //     }
+      //     cursor.continue();
+      //   } else {
+      //     console.log("Entries displayed.");
+      //   }
+      // };
+
+    });
+  };
+
+  // function editModal(oldData, store){
+  //   console.log(oldData.id)
+  //   $(".editInput").val(oldData.value)
+
+  //   $(".saveBtn").click(function(){
+  //     // var newData =$(".editInput").val().trim()
+  //     oldData.value = $(".editInput").val().trim()
+  //     console.log(oldData)
+  //     var updateNameRequest = store.put(oldData, Number(oldData.id))
+  //     console.log("-------------", updateNameRequest.transaction)
+  //     updateNameRequest.onerror = function() {
+  //       console.log("something went wrong")
+  //       console.log(updateNameRequest.error)
+  //     };
+  //     updateNameRequest.onsuccess = function() {
+  //       $(".editInput").val("")
+  //       getTasks();
+  //     };
+
+  //   })
+  // }
 
   // console.log(taskId)
   // var deleteReq = store.put(Number(taskId))
   // deleteReq.onsuccess = function(){
   //   getTasks()
   // }
-  console.log("edit button")
-})
+  console.log("edit button");
+});
 
 // used to be in request.onsuccess
-  // var tasks = [
-  //   { id: 1, name: "Mop living room" },
-  //   { id: 2, name: "Shower Today" },
-  //   { id: 3, name: "Write some code" },
-  // ];
-  // create transaction from database
-  // var transaction = db.transaction("tasks", "readwrite");
+// var tasks = [
+//   { id: 1, name: "Mop living room" },
+//   { id: 2, name: "Shower Today" },
+//   { id: 3, name: "Write some code" },
+// ];
+// create transaction from database
+// var transaction = db.transaction("tasks", "readwrite");
 
-
-  // transaction.onsuccess = function (event) {
-  //   console.log("[Transaction] ALL DONE!");
-  // };
-  // get store from transaction
-  // returns IDBObjectStore instance
-  // var tasksStore = transaction.objectStore("tasks");
-  // // put tasks data in tasksStore
-  // tasks.forEach(function (task) {
-  //   var db_op_req = tasksStore.add(task); // IDBRequest
-  // });
+// transaction.onsuccess = function (event) {
+//   console.log("[Transaction] ALL DONE!");
+// };
+// get store from transaction
+// returns IDBObjectStore instance
+// var tasksStore = transaction.objectStore("tasks");
+// // put tasks data in tasksStore
+// tasks.forEach(function (task) {
+//   var db_op_req = tasksStore.add(task); // IDBRequest
+// });
 
 //------------------------------>
 // const statusIndex = tasksStore.index("name");
@@ -163,6 +214,6 @@ $(document).on("click",".editBtn",function(){
 // Return an item by index
 // const getRequestIdx = statusIndex.getAll("complete");
 // getRequestIdx.onsuccess = () => {
-//   console.log(getRequestIdx.result); 
-// }; 
+//   console.log(getRequestIdx.result);
+// };
 // ------------------------------>

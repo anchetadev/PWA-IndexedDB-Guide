@@ -57,7 +57,7 @@ function getTasks(){
 
     retrievedb.result.map(function(item){
       console.log(item)
-      $(".list-group").append("<li class='list-group-item'>" + item.id + ": " + item.value + "<button style='float: right' type='button' idNo="+ item.id + " class='btn btn-danger deleteBtn'>Delete Task</button>")
+      $(".list-group").append("<li class='list-group-item'>" + item.id + ": " + item.name + "<button style='float: right' type='button' idNo="+ item.id + " class='btn btn-danger deleteBtn'>Delete Task</button>")
     })
     
 
@@ -76,7 +76,7 @@ $("#newTask").click(function(){
 
   // open up a transaction for that particular store (What table/schema do we want to use?)
   var tasksStore = transaction.objectStore("tasks");
-  let addReq =tasksStore.add({value: task});
+  let addReq =tasksStore.add({name: task});
 
   //when the task is added clear the form and retrieve from db (notice we can add an event listener to the above line!)
   addReq.onsuccess = function (e){
