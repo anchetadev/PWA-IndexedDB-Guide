@@ -53,7 +53,6 @@ function getTasks() {
   retrievedb.onsuccess = function () {
     console.log(retrievedb.result);
     $(".list-group").empty();
-    // var editBtn ="<button style='float: right; margin-right:5px;' type='button' idNo=" + item.id + " class='btn btn-info editBtn' data-toggle='modal' data-target='#exampleModalCenter'>Edit Task</button>"
     retrievedb.result.map(function (item) {
       console.log(item);
       $(".list-group").append(
@@ -63,8 +62,10 @@ function getTasks() {
           item.name +
           "<button style='float: right' type='button' idNo=" +
           item.id +
-          " class='btn btn-danger deleteBtn'>Delete Task</button>"
-
+          " class='btn btn-danger deleteBtn'>Delete Task</button>" +
+          "<button style='float: right; margin-right:5px;' type='button' idNo=" +
+          item.id +
+          " class='btn btn-info editBtn' data-toggle='modal' data-target='#exampleModalCenter'>Edit Task</button>"
       );
     });
   };
@@ -93,86 +94,40 @@ $(document).on("click", ".deleteBtn", function () {
   };
 });
 
-//this isn't working :(((((((
-// $(document).on("click", ".editBtn", function () {
-//   var transaction = db.transaction("tasks", "readwrite");
-//   var tasksStore = transaction.objectStore("tasks");
-//   console.log(tasksStore);
-//   let taskId = $(this).attr("idNo");
 
-//   var requestForItem = tasksStore.get(Number(taskId));
-//   requestForItem.onsuccess = function () {
-//     // console.log(requestForItem.result)
-//     var oldData = requestForItem.result;
-//     //give modal the old data and the store so that it can prepolulate the input and complete the transaction
-//     // editModal(requestForItem.result, store)
-//     // var data = requestForItem.result
-//     // data.name = $(".editInput").val().trim()
-//     $(".editInput").val(requestForItem.result.name);
+$(document).on("click", ".editBtn", function () {
+  let transaction = db.transaction("tasks", "readwrite");
+  let tasksStore = transaction.objectStore("tasks");
+  console.log(tasksStore);
+  let taskId = $(this).attr("idNo");
 
-//     $(".saveBtn").click(function () {
-//       // var newData =$(".editInput").val().trim()
-//       requestForItem.result.name = $(".editInput").val().trim()
-//       console.log( requestForItem.result)
-//       var updateNameRequest = tasksStore.put( requestForItem.result.name, Number(requestForItem.result.id))
-//       console.log("-------------", updateNameRequest.transaction)
-//       updateNameRequest.onerror = function() {
-//         console.log("something went wrong")
-//         console.log(updateNameRequest.error)
-//       };
-//       updateNameRequest.onsuccess = function() {
-//         console.log("here")
-//         $(".editInput").val("")
-//         getTasks();
-//       };
-//       //from mozilla with slight changes for my data
-//       // tasksStore.openCursor().onsuccess = function (event) {
-//       //   const cursor = event.target.result;
-//       //   if (cursor) {
-//       //     if (cursor.value.id === requestForItem.result.id) {
-//       //       const updateData = cursor.value;
+  var requestForItem = tasksStore.get(Number(taskId));
+  requestForItem.onsuccess = function () {
+    //give modal the old data and the store so that it can prepopulate the input and complete the transaction
+    $(".editInput").val(requestForItem.result.name);
 
-//       //       updateData.name = $(".editInput").val().trim();
-//       //       const request = cursor.update(updateData);
-//       //       request.onsuccess = function () {
-//       //         console.log("nice");
-//       //       };
-//       //     }
-//       //     cursor.continue();
-//       //   } else {
-//       //     console.log("Entries displayed.");
-//       //   }
-//       // };
-
-//     });
-//   };
-
-//   // function editModal(oldData, store){
-//   //   console.log(oldData.id)
-//   //   $(".editInput").val(oldData.value)
-
-//   //   $(".saveBtn").click(function(){
-//   //     // var newData =$(".editInput").val().trim()
-//   //     oldData.value = $(".editInput").val().trim()
-//   //     console.log(oldData)
-//   //     var updateNameRequest = store.put(oldData, Number(oldData.id))
-//   //     console.log("-------------", updateNameRequest.transaction)
-//   //     updateNameRequest.onerror = function() {
-//   //       console.log("something went wrong")
-//   //       console.log(updateNameRequest.error)
-//   //     };
-//   //     updateNameRequest.onsuccess = function() {
-//   //       $(".editInput").val("")
-//   //       getTasks();
-//   //     };
-
-//   //   })
-//   // }
-
-//   // console.log(taskId)
-//   // var deleteReq = store.put(Number(taskId))
-//   // deleteReq.onsuccess = function(){
-//   //   getTasks()
-//   // }
-//   console.log("edit button");
-// });
+    $(".saveBtn").click(function () {
+      // we must open a new transaction within this click listener
+      let transaction = db.transaction("tasks", "readwrite");
+      let tasksStore = transaction.objectStore("tasks");
+      // var newData =$(".editInput").val().trim()
+      requestForItem.result.name = $(".editInput").val().trim();
+      console.log(requestForItem.result);
+      // Specified auto increment for our tasks so we just pass the whole updated object back to indexedDB
+      var updateNameRequest = tasksStore.put(
+        requestForItem.result
+      );
+      updateNameRequest.onerror = function () {
+        console.log("something went wrong");
+        console.log(updateNameRequest.error);
+      };
+      updateNameRequest.onsuccess = function () {
+        console.log("you updated some entry!");
+        // empty the input and close the modal
+        $(".editInput").val("");
+        $('#exampleModalCenter').modal("toggle");
+        getTasks();
+      };
+    });
+  };
+});
