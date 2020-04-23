@@ -3,12 +3,11 @@ if (!window.indexedDB) {
     "Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available."
   );
 }
-
-//TODO: implement a todo list which works offline
-//Saves to indexedDB
+// open a request for the toDoList db instance
 const request = window.indexedDB.open("toDoList", 2);
 var db;
 
+//if we are successful then we save the instance into a variable called db
 request.onsuccess = function (event) {
   console.log("check out some data about our opened db: ", request.result);
   db = event.target.result; // result of opening the indexedDB instance "toDoList"
@@ -22,10 +21,10 @@ request.onerror = function (event) {
 // onupgradeneeded event is triggered when we are trying to create a new database or trying to upgrade the database with a new version.
 // whenever we make changes to db we must change the version number
 // like db migrations
-//  This is a great place to create the object store.
+// This is a great place to create the object store.
 
 request.onupgradeneeded = function (event) {
-  // create object store from db or event.target.result
+  // create object store from db
   db = event.target.result;
   let store = db.createObjectStore("tasks", {
     keyPath: "id",
@@ -72,7 +71,6 @@ function getTasks() {
 }
 
 $("#newTask").click(function () {
-  // console.log($("#taskName").val())
   var task = $("#taskName").val().trim();
   var transaction = db.transaction("tasks", "readwrite");
   var tasksStore = transaction.objectStore("tasks");

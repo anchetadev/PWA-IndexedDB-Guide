@@ -1,4 +1,4 @@
-# Quick start to IndexedDB (all CRUD operations) Except U right now it's broken
+# Quick start to IndexedDB (all CRUD operations) 
 
 Screenshot of app located at bottom
 
