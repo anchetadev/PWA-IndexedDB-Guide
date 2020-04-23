@@ -1,12 +1,14 @@
-# Quick start to IndexedDB (all CRUD operations)
+# Quick start to IndexedDB (all CRUD operations) Except U right now it's broken
 
 Screenshot of app located at bottom
 
-I always start with something that makes sense, in this case we should check if the user has indexedDB available, if not we let them know that this will not work (offline use)
+The whole poing of using indexedDB is so that we have a tool in the browser that can keep track of data so that when we implement some feature for offline use, we won't have MongoDB to solely rely on (MongoDB or any other DB which is using a virtual instance in production will _not_ work offline so this is our backup)
+
+I always start with something that makes sense, in this case we should check if the user has indexedDB available, if not we let them know that offline use will not work
 
 ```
 if (!window.indexedDB) {
-  console.log("Your browser doesn't support a stable version of IndexedDB. Offline features will not be available.");
+  alert("Your browser doesn't support a stable version of IndexedDB. Offline features will not be available.");
 }
 ```
 Now let's get into the more complex stuff, starting with making a connection to indexedDB. For now we can think of indexedDB as something like localstorage in context of PWA. We are using this so that we can enable offline features. Even if the user has no internet they will still have access to the browser's indexedDB (like localstorage). Unlike localstorage, indexedDB can store all types of different data types such as object and arrays whereas localstorage only accepted strings.
@@ -21,7 +23,7 @@ Just like in jQuery, we want to add listeners to handle different types of event
 ```
 request.onsuccess = function (event) {
   console.log("check out some data about our opened db: ", request.result);
-  db = event.target.result; // === request.result
+  db = event.target.result; // result of opening the indexedDB instance "toDoList"
   getTasks() //this function retrieves data from indexedDB so that if there is anything in there we can have it for our list
 };
 ```
@@ -107,6 +109,10 @@ $(document).on("click",".deleteBtn",function(){
   }
 })
 ```
+
+It is also noteworthy that IndexedDB has some criticisms since it is using this outdated event listener technique to keep track of what's happening (onsuccess, onerror, onupgradeneeded, etc). IndexedDB was invented before promises and so that's why there's not any .then blocks anywhere even though now it makes a lot of sense to just use a .then. There is workaround though! 
+
+[This is an NPM package which is basically just IndexedDB with promises!](https://www.npmjs.com/package/idb "IndexedDB but make it this decade")
 
 Here is what the app looks like!
 ![Nice Photo](./assets/myCoolWebsite.png) 
