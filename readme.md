@@ -17,6 +17,7 @@ The [Quick Start Guide for PWA](./quickStartPWA/readme.md) will cover some basic
 - For all you avid readers 
     - [here's some really good reading to deep dive into PWA](https://codelabs.developers.google.com/codelabs/your-first-pwapp/#0 "'It's like a movie but in my head!' -Sam Puckett from iCarly in that one episode IYKYK")
     - [Alternate to the above resource](https://developers.google.com/web/ilt/pwa/offline-quickstart "I like the Offline Quickstrart section!")
+    - [Beautifully visual guide of a PWA cookbook](https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook#on-activate "Graphs and charts and arrows oh my!")
 
 - For all of you who like videos [here's an overview of PWA](https://youtu.be/cmGr0RszHc8 "He's using a Wii remote for the slides I love it")
 

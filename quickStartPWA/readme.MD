@@ -19,7 +19,20 @@ The manifest.json in this app just has a few icons for now, that's really all th
 
 
 
+### Now on to the Service Worker 😱
 
+JK, it's really not that scary. In short the Service Worker's normal run through can be summated down to three events: Registration -> Installation -> Activation
+
+1) Registration: We tell the browser that it should be aware of the Service Worker and that it will need to install it
+
+```Code snippet here on registration```
+
+2) Installation: When the browser detects that this is new or is different than the last time (if previously accessed) it was here it will try to install the service worker. We can use the event listener called 'install' to make this happen
+ - 2a) After the initial page load users will benefit from PWA features! 
+
+ ```code snippet here```
+
+ 3) Activation: 
 
 
 
