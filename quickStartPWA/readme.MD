@@ -8,7 +8,7 @@ Sidenote: Most browsers support PWA just be careful if you or your audience is u
 
 ["The web app manifest is a JSON file that tells the browser about your Progressive Web App and how it should behave when installed on the user's desktop or mobile device. A typical manifest file includes the app name, the icons the app should use, and the URL that should be opened when the app is launched."](https://web.dev/add-manifest/ "The first reading in the list of sources also mentions this!")
 
-There are a ton of cool things this file can do for us for example<sup>1</sup>:
+There are a ton of cool things this file can do for us for example<sup><strong>1</strong></sup>:
 
 - ```display``` in its own window
 - tell the page what page to open when the user visits it ```start_url```
@@ -37,7 +37,7 @@ JK, it's really not that scary. In short the Service Worker's normal run through
 
 ```code snippet here```
 
-##### Important to note: Refreshing the page will not properly update the Service Worker if changed or updated, you must close any tabs of your app and reopen it in a new tab/window. This will ensure that the old Service worker has enough time to be considered out of use and so will be updated properly. Check out the service worker reading in the [Main Outline Readme](../readme.md)
+##### Important to note: Refreshing the page will not properly update the Service Worker if changed or updated, you must close any tabs of your app and reopen it in a new tab/window. This will ensure that the old Service Worker has enough time to be considered out of use and so will be updated properly. Check out the service worker reading in the [Main Outline Readme](../readme.md)
 
 
 
