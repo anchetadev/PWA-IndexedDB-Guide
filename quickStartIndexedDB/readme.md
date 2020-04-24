@@ -46,8 +46,24 @@ request.onupgradeneeded = function (event) {
   store.createIndex("name", "name", {unique: false});
 };
 ```
+Before we jump into CRUD operations it's important to know that in order to do anything related to the toDoList DB we must open up a transaction object from the DB. Here are a couple generic examples: 
+```   
+   var transaction = db.transaction(storeName, mode);
+   var transaction = db.transaction(storeNamesArray, mode);
+// In context with our set up that would look like this:
+   var transaction = db.transaction("tasks", mode);
+// If there were multiple sets of data we wanted to manipulate
+   var transaction = db.transaction(["tasks", "someOtherThing"], mode); 
+```
+As you can see, storename = the object store we want to access and the mode = what exactly we intend to do. 
+Mode is optional and can be one of three things: 
+- readonly -> if we do not specify it defaults to this
+- readwrite -> this one I used everywhere it's just more convenient
+- versionchange
 
-Function for retrieving the data (here is the R part of 'CRUD'!)
+## Getting data (here is the R part of 'CRUD'!)
+
+Function for retrieving the data 
 ```
 function getTasks(){
   var transaction = db.transaction("tasks", "readwrite");
@@ -66,8 +82,9 @@ function getTasks(){
   }
 }
 ```
+## Creating data (here is the C part of 'CRUD'!)
 
-Click listener for the submit button to create a new task (C of 'CRUD')
+Click listener for the submit button to create a new task
 ```
 $("#newTask").click(function(){
   // console.log($("#taskName").val())
@@ -87,6 +104,7 @@ $("#newTask").click(function(){
   }
 })
 ```
+## Deleting data (here is the D part of 'CRUD'!)
 
 Delete button for created tasks (D of 'crud') Same process as adding something except here we are deleting!
 

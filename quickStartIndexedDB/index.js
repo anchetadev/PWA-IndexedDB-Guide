@@ -31,18 +31,6 @@ request.onupgradeneeded = function (event) {
     autoIncrement: true,
   });
   store.createIndex("name", "name", { unique: false });
-
-  // To insert or do any operations on database, we need to get the transaction object from the database.
-  // That can be done by using the transaction method in the database with one of the following signatures.
-  //   var transaction = db.transaction(storeName, mode);
-  //   var transaction = db.transaction(storeNamesArray, mode);
-  // In the above syntax, the first parameter is the name of the object store or the array of names of the object stores.
-  // If you specify the array of store names, then you get permission to perform database operations on multiple stores.
-  // The second mode parameter is optional. mode can be either readonly, readwrite, or versionchange.
-  // By default, readonly is the default mode. While doing read only operations, you should use readonly mode for performance benefits.
-
-  //   To perform an operation in any store, we need to get the object store from the transaction with the below syntax.
-  //   var objectStore = transaction.objectStore(storeName);
 };
 
 function getTasks() {
