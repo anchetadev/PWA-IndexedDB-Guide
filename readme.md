@@ -14,8 +14,11 @@ The [Quick Start Guide for PWA](./quickStartPWA/readme.md) will cover some basic
 
 #### Here are some resuorces that helped me make this guide:
 
-- For all you avid readers [here's some really good reading to deep dive into PWA](https://codelabs.developers.google.com/codelabs/your-first-pwapp/#0 "'It's like a movie but in my head!' -Sam Puckett from iCarly in that one episode IYKYK")
+- For all you avid readers 
+    - [here's some really good reading to deep dive into PWA](https://codelabs.developers.google.com/codelabs/your-first-pwapp/#0 "'It's like a movie but in my head!' -Sam Puckett from iCarly in that one episode IYKYK")
+    - [Alternate to the above resource](https://developers.google.com/web/ilt/pwa/offline-quickstart "I like the Offline Quickstrart section!")
 
 - For all of you who like videos [here's an overview of PWA](https://youtu.be/cmGr0RszHc8 "He's using a Wii remote for the slides I love it")
 
 - More details on manifest.json [BTW they're in your react apps when you use boilerplate 👀](https://web.dev/add-manifest/ "It's okay I didn't know either")
+- More details on [Service Worker!](https://developers.google.com/web/ilt/pwa/introduction-to-service-worker "It's super new still get on those fundamental concepts!")
