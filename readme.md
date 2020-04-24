@@ -1,6 +1,6 @@
 # This is a work in progress!!
 
-# Annotated Guide to PWA and service workers (using indexedDb) 
+# Outline for Annotated Guide to PWA and service workers (using indexedDb) 
 
 This is a guide intended to clarify PWA concepts. Intended for use by anyone who needs a more in depth look into how it all works! It is best to go through the [Quick Start Guide for IndexedDB](./quickStartIndexedDB/readme.md) first since indexedDB is super important in context to how we will set up offline features in this PWA.
 

@@ -37,7 +37,7 @@ JK, it's really not that scary. In short the Service Worker's normal run through
 
 ```code snippet here```
 
-##### Important to note: Refreshing the page will not properly update the Service Worker if changed or updated, you must close any tabs of your app and reopen it in a new tab/window. This will ensure that the old Service worker has enough time to be considered out of use and so will be updated properly. Check out the service worker reading in the [Main Outline Readme](../outline.md)
+##### Important to note: Refreshing the page will not properly update the Service Worker if changed or updated, you must close any tabs of your app and reopen it in a new tab/window. This will ensure that the old Service worker has enough time to be considered out of use and so will be updated properly. Check out the service worker reading in the [Main Outline Readme](../readme.md)
 
 
 
