@@ -28,12 +28,16 @@ JK, it's really not that scary. In short the Service Worker's normal run through
 ```Code snippet here on registration```
 
 2) Installation: When the browser detects that this is new or is different than the last time (if previously accessed) it was here it will try to install the service worker. We can use the event listener called 'install' to make this happen
- - 2a) After the initial page load users will benefit from PWA features! 
+    - 2a) After the initial page load users will benefit from PWA features! 
 
- ```code snippet here```
+```code snippet here```
 
- 3) Activation: 
+ 3) Activation: Now that the service worker has been registered an installed it is considered activated via the 'activate' event listener! It is basically ready for use.
+    - 3a) This is the place where we should delete any old, outdated stuff
 
+```code snippet here```
+
+##### Important to note: Refreshing the page will not properly update the Service Worker if changed or updated, you must close any tabs of your app and reopen it in a new tab/window. This will ensure that the old Service worker has enough time to be considered out of use and so will be updated properly. Check out the service worker reading in the [Main Outline Readme](../outline.md)
 
 
 
