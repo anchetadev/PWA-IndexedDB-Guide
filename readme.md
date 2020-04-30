@@ -8,6 +8,12 @@ This is a guide intended to clarify PWA concepts. Intended for use by anyone who
 
 To do list (I know very original) application which features all CRUD operations. Simply open [index.html](./quickStartIndexedDB/index.html) in your browser to see it in action. Open the browser dev tools and open the application tab to see the indexedDB stuff (should be under a db called ToDoList)
 
+#### Here are some resuorces that helped me make the indexedDB guide:
+- Thank you Joshua Bell from [Stackoverflow](https://stackoverflow.com/questions/61296252/failed-to-execute-put-on-idbobjectstore-the-transaction-has-finished "Updating was the hardest part!")
+- I referenced this [Blog Post](https://itnext.io/indexeddb-your-second-step-towards-progressive-web-apps-pwa-dcbcd6cc2076 "Some typos in there but still good") a lot
+- Nothing better than good old [documentation!](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB "I think I still used the blog more than this one")
+- I recommend watching this [Youtube video](https://youtu.be/g4U5WRzHitM "I think I only referenced error syntax in this video") on 1.5x speed 
+
 ## PWA 
 
 The [Quick Start Guide for PWA](./quickStartPWA/readme.md) will cover some basic functionality on enabling offline use. We will be using MongoDB/Mongoose and IndexedDB to make this happen! Before you go there though check out these resources below! I am an INTP (Myers-Briggs Personality type) so I really like to skim and absorb many resources before I make a judgement or decision on something. In this case I juxtaposed some resources in different formats (readings, videos etc) to see what stuck with me and made sense. These resources were the main resources I used to compile this guide. Everyone's different though so please take a gander at the resources that helped me! While my guide should help a bit, nothing beats a primary source! 
