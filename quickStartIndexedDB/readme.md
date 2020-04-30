@@ -43,6 +43,7 @@ request.onupgradeneeded = function (event) {
   // create object store from db or event.target.result
   db = event.target.result;
   let store = db.createObjectStore("tasks", { keyPath: "id", autoIncrement: true });
+  // createIndex can take up to three parameters: (name, keyPath, options)
   store.createIndex("name", "name", {unique: false});
 };
 ```
@@ -104,11 +105,62 @@ $("#newTask").click(function(){
   }
 })
 ```
+## Updating data (here is the U part of 'CRUD'!)
+
+This part may seem a little complicated, but don't worry! Let's break it down in a few basic steps:
+
+User clicks edit button -> we "get" that specific item -> we prepopuluate the edit form with the data -> user changes something and presses the save button -> update is finalized with the put method
+
+Sidenote: using .on syntax since these buttons appear after page load
+
+```js
+$(document).on("click", ".editBtn", function () {
+  // open a transaction so that we can retrieve or get the specific item we are going to update
+  let transaction = db.transaction("tasks", "readwrite");
+  let tasksStore = transaction.objectStore("tasks");
+  // in this example I stored the item's ID in the button itself in an attribute called idNo
+  let taskId = $(this).attr("idNo");
+  // attempt to retrieve that item
+  var requestForItem = tasksStore.get(Number(taskId));
+  requestForItem.onsuccess = function () {
+    //give modal the old data and the store so that it can prepopulate the input
+    $(".editInput").val(requestForItem.result.name);
+
+    $(".saveBtn").click(function () {
+      // we must open a new transaction within this click listener
+      // it may be redundant but it is because the transaction closes once we do something else
+      // in this case we are in a different click listener so the transaction we opened from before is now closed
+      // Thanks to Joshua Bell in StackOverflow for helping me with this part! Check the link below:
+      // https://stackoverflow.com/questions/61296252/failed-to-execute-put-on-idbobjectstore-the-transaction-has-finished
+      let transaction = db.transaction("tasks", "readwrite");
+      let tasksStore = transaction.objectStore("tasks");
+      //we edit the item's name and change it to whatever the user entered in the input
+      requestForItem.result.name = $(".editInput").val().trim();
+      console.log("this is what you changed it to", requestForItem.result);
+      // Specified auto increment for our tasks so we just pass the whole updated object back to indexedDB, we don't have to manually change the ID
+      var updateNameRequest = tasksStore.put(
+        requestForItem.result
+      );
+      updateNameRequest.onerror = function () {
+        console.log("something went wrong");
+        console.log(updateNameRequest.error);
+      };
+      updateNameRequest.onsuccess = function () {
+        console.log("you updated some entry!");
+        // empty the input and close the modal
+        $(".editInput").val("");
+        $('#exampleModalCenter').modal("toggle");
+        // update our page with all tasks again
+        getTasks();
+      };
+    });
+  };
+});
+```
+
 ## Deleting data (here is the D part of 'CRUD'!)
 
 Delete button for created tasks (D of 'crud') Same process as adding something except here we are deleting!
-
-Sidenote: using .on syntax since these buttons appear after page load
 
 ```js
 $(document).on("click",".deleteBtn",function(){
