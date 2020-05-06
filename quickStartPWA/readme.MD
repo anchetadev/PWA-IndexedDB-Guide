@@ -25,12 +25,44 @@ JK, it's really not that scary. In short the Service Worker's normal run through
 
 1) Registration: We tell the browser that it should be aware of the Service Worker and that it will need to install it
 
-```Code snippet here on registration```
+```js
+    //this is in the index.html file
+    if ('serviceWorker' in navigator) {
+        // if the service worker is available we register it
+        // I also added sw.js which is the file that houses all the stuff for my service worker
+        navigator.serviceWorker.register('./sw.js').then(function(reg) {
+            console.log('Successfully registered service worker', reg);
+        }).catch(function(err) {
+            console.warn('Error whilst registering service worker', err);
+        });
+    }
+```
 
-2) Installation: When the browser detects that this is new or is different than the last time (if previously accessed) it was here it will try to install the service worker. We can use the event listener called 'install' to make this happen
-    - 2a) After the initial page load users will benefit from PWA features! 
+2) Installation: When the browser detects that this is new (first time registering) or is different than the last time (if previously accessed) it will try to install the service worker. We can use the event listener called 'install' to make this happen. This is where we want to cache files which are imperative for offline function
+    - 2a) After the initial page load users will benefit from PWA features since this stuff will be stored in cache! It will be persistent with the user with or without internet since the caching is done locally.
 
-```code snippet here```
+```js
+// This will help us determine the version of our cache (we must change this if anything updates)
+var cacheName = 'cache-v1';
+self.addEventListener('install', function(e) {
+    // These are the files that will be locally cached
+     e.waitUntil(
+        caches.open(cacheName).then(function(cache) {
+            return cache.addAll([
+                './',
+                '/icons/list256.png',
+                '/icons/list512.png',
+                './manifest.json',
+                './index.js',
+                './index.html'
+            ]).then(function() {
+                console.log("cached!")
+                self.skipWaiting();
+            });
+        })
+    );
+}
+```
 
  3) Activation: Now that the service worker has been registered an installed it is considered activated via the 'activate' event listener! It is basically ready for use.
     - 3a) This is the place where we should delete any old, outdated stuff
