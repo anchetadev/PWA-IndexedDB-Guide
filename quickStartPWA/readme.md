@@ -64,7 +64,7 @@ self.addEventListener('install', function(e) {
 }
 ```
 
- 3) Activation: Now that the service worker has been registered an installed it is considered activated via the 'activate' event listener! It is basically ready for use.
+ 3) Activation: Now that the service worker has been registered and installed it is considered activated via the 'activate' event listener! It is basically ready for use.
     - 3a) This is the place where we should delete any old, outdated stuff
 
 ```code snippet here```
@@ -75,4 +75,4 @@ self.addEventListener('install', function(e) {
 
 <strong>1</strong>: [Manifest page of the Codelabs resource](https://codelabs.developers.google.com/codelabs/your-first-pwapp/#3 "Citing resources my English teachers would be proud")
 
-Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> 
