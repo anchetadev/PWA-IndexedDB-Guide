@@ -57,6 +57,8 @@ self.addEventListener('install', function(e) {
                 './index.html'
             ]).then(function() {
                 console.log("cached!")
+                // this has to do with the behavior of the activation phase of service worker life cycle's check out source 2 at the bottom of this page!
+                // in short it forces our service worker to take any updates more quickly, essentially allowing us to use a newer version of our service worker the moment the page is accessed (Otherwise you would have to close all instances of the page and then open it again to see new changes)
                 self.skipWaiting();
             });
         })
@@ -66,6 +68,7 @@ self.addEventListener('install', function(e) {
 
  3) Activation: Now that the service worker has been registered and installed it is considered activated via the 'activate' event listener! It is basically ready for use.
     - 3a) This is the place where we should delete any old, outdated stuff
+    - 3b) "A service worker won't receive events like fetch and push until it successfully finishes installing and becomes "active". By default, a page's fetches won't go through a service worker unless the page request itself went through a service worker. So you'll need to refresh the page to see the effects of the service worker." <sup><strong>2</strong></sup>
 
 ```code snippet here```
 
@@ -74,5 +77,6 @@ self.addEventListener('install', function(e) {
 
 
 <strong>1</strong>: [Manifest page of the Codelabs resource](https://codelabs.developers.google.com/codelabs/your-first-pwapp/#3 "Citing resources my English teachers would be proud")
+<strong>2</strong>: [Google resource on the activate](https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle "This can be confusing but don't get caught up in the details too much")(I really like the dog and cat example he uses to show how activate happens only after the first page load you'll have to read more to know what this means!)
 
 Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> 
