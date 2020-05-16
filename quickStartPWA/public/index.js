@@ -4,7 +4,7 @@ if (!window.indexedDB) {
   );
 }
 
-const request = window.indexedDB.open("toDoList", 2);
+const request = window.indexedDB.open("toDoListWithSW", 2);
 var db;
 
 
