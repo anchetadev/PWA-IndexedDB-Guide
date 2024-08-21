@@ -4,7 +4,7 @@ PWA is a relatively huge topic so while quick is in the title, that surely may n
 
 Sidenote: Most browsers support PWA just be careful if you or your audience is using Safari or IE (smh keep up Apple). That being said you should use Chrome, I am using Chrome so to get the most consistency please jump on the Chrome train at least for this guide!
 
-### Let's start with the manifest.json
+## Let's start with the manifest.json
 
 ["The web app manifest is a JSON file that tells the browser about your Progressive Web App and how it should behave when installed on the user's desktop or mobile device. A typical manifest file includes the app name, the icons the app should use, and the URL that should be opened when the app is launched."](https://web.dev/add-manifest/ "The first reading in the list of sources also mentions this!")
 
@@ -17,15 +17,15 @@ There are a ton of cool things this file can do for us for example<sup><strong>1
 
 The manifest.json in this app just has a few icons for now, that's really all that's important for now
 
-### Now on to the Service Worker 😱
+## Now on to the Service Worker 😱
 
 JK, it's really not that scary. In short the Service Worker's normal run through can be summated down to three events: 
 - Registration 
 - Installation 
 - Activation
 
-#### Registration
-We tell the browser that it should be aware of the Service Worker and that it will need to install it
+### Registration
+Tell the browser that it should be aware of the Service Worker and that it will need to install it
 
 ```js
 //this is in the index.html file
@@ -43,7 +43,7 @@ if ("serviceWorker" in navigator) {
 }
 ```
 
-#### Installation
+### Installation
 When the browser detects that this is new (first time registering) or is different than the last time (if previously accessed) it will try to install the service worker. We can use the event listener called 'install' to make this happen. This is where we want to cache files which are imperative for offline function
   - After the initial page load users will benefit from PWA features since this stuff will be stored in cache! It will be persistent with the user with or without internet since the caching is done locally.
 
@@ -72,7 +72,7 @@ self.addEventListener('install', function(e) {
 }
 ```
 
-#### Activation
+### Activation
 Now that the service worker has been registered and installed it is considered activated via the 'activate' event listener! It is basically ready for use.
   - This is the place where we should delete any old, outdated stuff
   - "A service worker won't receive events like fetch and push until it successfully finishes installing and becomes "active". By default, a page's fetches won't go through a service worker unless the page request itself went through a service worker. So you'll need to refresh the page to see the effects of the service worker." <sup><strong>2</strong></sup>
@@ -95,10 +95,9 @@ self.addEventListener("activate", (event) => {
 });
 ```
 
-At this point now the application now registers, installs, and activates! There's nothing here to help with the functionality yet so that is where the next event comes in
+At this point now the application now registers, installs, and activates! There's nothing here to help with the functionality yet so that is where the next event comes in.
 
-Fetch: 
-
+## Fetch 
 
 
 **Important to note: Refreshing the page will not properly update the Service Worker if changed or updated, you must close any tabs of your app and reopen it in a new tab/window. This will ensure that the old Service Worker has enough time to be considered out of use and so will be updated properly. Check out the service worker reading in the [Main Outline Readme](../readme.md)**
