@@ -19,9 +19,13 @@ The manifest.json in this app just has a few icons for now, that's really all th
 
 ### Now on to the Service Worker 😱
 
-JK, it's really not that scary. In short the Service Worker's normal run through can be summated down to three events: Registration -> Installation -> Activation
+JK, it's really not that scary. In short the Service Worker's normal run through can be summated down to three events: 
+- Registration 
+- Installation 
+- Activation
 
-1. Registration: We tell the browser that it should be aware of the Service Worker and that it will need to install it
+#### Registration
+We tell the browser that it should be aware of the Service Worker and that it will need to install it
 
 ```js
 //this is in the index.html file
@@ -39,8 +43,9 @@ if ("serviceWorker" in navigator) {
 }
 ```
 
-2. Installation: When the browser detects that this is new (first time registering) or is different than the last time (if previously accessed) it will try to install the service worker. We can use the event listener called 'install' to make this happen. This is where we want to cache files which are imperative for offline function
-   - 2a) After the initial page load users will benefit from PWA features since this stuff will be stored in cache! It will be persistent with the user with or without internet since the caching is done locally.
+#### Installation
+When the browser detects that this is new (first time registering) or is different than the last time (if previously accessed) it will try to install the service worker. We can use the event listener called 'install' to make this happen. This is where we want to cache files which are imperative for offline function
+  - After the initial page load users will benefit from PWA features since this stuff will be stored in cache! It will be persistent with the user with or without internet since the caching is done locally.
 
 ```js
 // This will help us determine the version of our cache (we must change this if anything updates)
@@ -67,9 +72,10 @@ self.addEventListener('install', function(e) {
 }
 ```
 
-3.  Activation: Now that the service worker has been registered and installed it is considered activated via the 'activate' event listener! It is basically ready for use.
-    - 3a) This is the place where we should delete any old, outdated stuff
-    - 3b) "A service worker won't receive events like fetch and push until it successfully finishes installing and becomes "active". By default, a page's fetches won't go through a service worker unless the page request itself went through a service worker. So you'll need to refresh the page to see the effects of the service worker." <sup><strong>2</strong></sup>
+#### Activation
+Now that the service worker has been registered and installed it is considered activated via the 'activate' event listener! It is basically ready for use.
+  - This is the place where we should delete any old, outdated stuff
+  - "A service worker won't receive events like fetch and push until it successfully finishes installing and becomes "active". By default, a page's fetches won't go through a service worker unless the page request itself went through a service worker. So you'll need to refresh the page to see the effects of the service worker." <sup><strong>2</strong></sup>
 
 ```js
 self.addEventListener("activate", (event) => {
@@ -95,9 +101,10 @@ Fetch:
 
 
 
-##### Important to note: Refreshing the page will not properly update the Service Worker if changed or updated, you must close any tabs of your app and reopen it in a new tab/window. This will ensure that the old Service Worker has enough time to be considered out of use and so will be updated properly. Check out the service worker reading in the [Main Outline Readme](../readme.md)
+**Important to note: Refreshing the page will not properly update the Service Worker if changed or updated, you must close any tabs of your app and reopen it in a new tab/window. This will ensure that the old Service Worker has enough time to be considered out of use and so will be updated properly. Check out the service worker reading in the [Main Outline Readme](../readme.md)**
 
-<strong>1</strong>: [Manifest page of the Codelabs resource](https://codelabs.developers.google.com/codelabs/your-first-pwapp/#3 "Citing resources my English teachers would be proud")
-<strong>2</strong>: [Google resource on the activate](https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle "This can be confusing but don't get caught up in the details too much")(I really like the dog and cat example he uses to show how activate happens only after the first page load you'll have to read more to know what this means!)
+**1.** [Manifest page of the Codelabs resource](https://codelabs.developers.google.com/codelabs/your-first-pwapp/#3 "Citing resources my English teachers would be proud")
+
+**2.** [Google resource on the activate](https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle "This can be confusing but don't get caught up in the details too much")(I really like the dog and cat example he uses to show how activate happens only after the first page load you'll have to read more to know what this means!)
 
 Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
