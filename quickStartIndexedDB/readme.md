@@ -1,24 +1,35 @@
 # Quick start to IndexedDB (all CRUD operations) 
 
-Screenshot of app located at bottom
+By the end of this readme, you will learn how to:
 
-The whole poing of using indexedDB is so that we have a tool in the browser that can keep track of data so that when we implement some feature for offline use, we won't have MongoDB to solely rely on (MongoDB or any other DB which is using a virtual instance in production will _not_ work offline so this is our backup)
+- Create a web-based to-do list that can store a user's to-do list offline
+- Verify that indexedDB is available to the user
+- Write out CRUD operations to interact with indexedDB's database
 
-I always start with something that makes sense, in this case we should check if the user has indexedDB available, if not we let them know that offline use will not work
+# Table of Contents
+1. [Getting Started](#GettingStarted)
+2. [Getting data](#Gettingdata)
+3. [Updating data](#Updatingdata)
+4. [Deleting data](#Deletingdata)
+
+## Getting Started
+The whole point of using indexedDB is so that we have a tool in the browser that can keep track of data so that when we implement some feature for offline use, we won't have MongoDB to solely rely on (MongoDB or any other DB which is using a virtual instance in production will _not_ work offline so this is our backup)
+
+Always start verifying if the new technology will even work for the user. In this case you can check if the user has indexedDB available. If not, let them know that offline features will not work.
 
 ```js
 if (!window.indexedDB) {
   alert("Your browser doesn't support a stable version of IndexedDB. Offline features will not be available.");
 }
 ```
-Now let's get into the more complex stuff, starting with making a connection to indexedDB. For now we can think of indexedDB as something like localstorage in context of PWA. We are using this so that we can enable offline features. Even if the user has no internet they will still have access to the browser's indexedDB (like localstorage). Unlike localstorage, indexedDB can store all types of different data types such as object and arrays whereas localstorage only accepted strings.
+Now let's get into the more complex stuff, starting with making a connection to indexedDB. For now, think of indexedDB as something like localstorage in context of PWA. We are using this so that we can enable offline features. Even if the user has no internet they will still have access to the browser's indexedDB (like localstorage). Unlike localstorage, indexedDB can store all types of different data types such as object and arrays whereas localstorage only accepted strings.
 
 ```js
 const request = window.indexedDB.open("toDoList", 1);
 var db; //this is a variable we will use throughout the file so I've decalred this globally
 ```
 
-Just like in jQuery, we want to add listeners to handle different types of events. Let's add in an onsuccess event handler so we can handle what happens when line 7 executes properly. 
+Just like in jQuery, we want to add listeners to handle different types of events. Let's add in an onsuccess event handler so we can handle what happens when the previous block of code executes properly. 
 
 ```js
 request.onsuccess = function (event) {
@@ -62,9 +73,12 @@ Mode is optional and can be one of three things:
 - readwrite -> this one I used everywhere it's just more convenient
 - versionchange
 
-## Getting data (here is the R part of 'CRUD'!)
+## Getting data 
+> ❗Here is the R part of 'CRUD'!
 
-Function for retrieving the data 
+>💡 We cover the R part of the CRUD acronym because reading data is the simplest way to interact with any data.
+
+Function for retrieving the data:
 ```js
 function getTasks(){
   var transaction = db.transaction("tasks", "readwrite");
@@ -83,9 +97,9 @@ function getTasks(){
   }
 }
 ```
-## Creating data (here is the C part of 'CRUD'!)
-
-Click listener for the submit button to create a new task
+## Creating data 
+> ❗Here is the C part of 'CRUD'!
+Click listener for the submit button to create a new task.
 ```js
 $("#newTask").click(function(){
   // console.log($("#taskName").val())
@@ -105,13 +119,17 @@ $("#newTask").click(function(){
   }
 })
 ```
-## Updating data (here is the U part of 'CRUD'!)
-
+## Updating data
+>❗Here is the U part of 'CRUD'!
 This part may seem a little complicated, but don't worry! Let's break it down in a few basic steps:
 
-User clicks edit button -> we "get" that specific item -> we prepopuluate the edit form with the data -> user changes something and presses the save button -> update is finalized with the put method
+1. User clicks edit button 
+2. We "get" that specific item 
+3. We prepopuluate the edit form with the data 
+4. User changes something and presses the save button
+5. Update is finalized with the put method
 
-Sidenote: using .on syntax since these buttons appear after page load
+>💡 Use .on syntax since these buttons appear after page load
 
 ```js
 $(document).on("click", ".editBtn", function () {
@@ -158,8 +176,8 @@ $(document).on("click", ".editBtn", function () {
 });
 ```
 
-## Deleting data (here is the D part of 'CRUD'!)
-
+## Deleting data
+>❗Here is the D part of 'CRUD'!
 Delete button for created tasks (D of 'crud') Same process as adding something except here we are deleting!
 
 ```js
@@ -184,5 +202,9 @@ It is also noteworthy that IndexedDB has some criticisms since it is using this 
 
 [This is an NPM package which is basically just IndexedDB with promises!](https://www.npmjs.com/package/idb "IndexedDB but make it this decade")
 
+## App Screenshot
 Here is what the app looks like!
-![Nice Photo](./assets/myCoolWebsite.png) 
+![PWA app main page](./assets/myCoolWebsite.png) 
+
+## End Notes
+This app is nothing fancy. There are quite a few bugs in it currently. Using the Enter key to try to submit a task doesn't work. Deleting all your tasks and adding new ones doesn't restart the task list numbers. I am sure there are more! Take it as inspiration to improve what exists 😆
